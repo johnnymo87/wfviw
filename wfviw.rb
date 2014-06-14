@@ -85,6 +85,10 @@ post "/deploy/:id/delete" do
   200
 end
 
+get "/deploy/new" do
+  erb :new
+end
+
 post "/deploy" do
   DeployManager.create(params)
   201
