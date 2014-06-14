@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -6,9 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>WFVIW!?</title>
-    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="/css/bootstrap.min.css" rel="stylesheet"/>
     <style type="text/css">
       .page-header {
+        border-bottom: none;
+        text-align: center;
+      }
+
+      #content {
         border-bottom: none;
         text-align: center;
       }
@@ -31,9 +35,11 @@
       <div class="page-header">
         <h1><abbr title="What Fucking Version is Where!?">WFVIW!?</abbr></h1>
       </div>
-      <%= yield %>
+      <div id="content">
+        <%= yield %>
+      </div>
     </div>
-    <script src="js/zepto.min.js"></script>
+    <script src="/js/zepto.min.js"></script>
     <script>
       $().ready(function() {
         $('select[name=env]').on('change', function() {
