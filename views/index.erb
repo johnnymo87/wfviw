@@ -1,11 +1,13 @@
 <% if @environments.any? %>
   <form action="/">
-  <select name="env">
-    <option value="">All Environments</option>
-    <% @environments.each do |env| %>
-      <option value="<%= env.id %>" <%= "selected" if params["env"].to_i == env.id %>><%= env.name %></option>
-    <% end %>
-  </select>
+    <div class="form-group">
+      <select name="env" class="form-control">
+        <option value="">All Environments</option>
+        <% @environments.each do |env| %>
+          <option value="<%= env.id %>" <%= "selected" if params["env"].to_i == env.id %>><%= env.name %></option>
+        <% end %>
+      </select>
+    </div>
   </form>
 <% end %>
 
@@ -36,4 +38,4 @@
     </tbody>
   </table>
 <% end %>
-<a href='/deploy/new'>Add a new Deployment</a>
+<a href='/deploy/new' class="btn btn-primary">Add a new Deployment</a>

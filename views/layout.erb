@@ -12,15 +12,6 @@
         text-align: center;
       }
 
-      #content {
-        border-bottom: none;
-        text-align: center;
-      }
-
-      table {
-        text-align: left;
-      }
-
       .container {
         width: 750px;
       }
@@ -47,18 +38,18 @@
     <script>
       $().ready(function() {
         $('select[name=env]').on('change', function() {
-          $(this).parent('form').submit();
+          $(this).closest('form').submit();
         });
 
         $('.deployment a.delete').on('click', function(e) {
-	   e.preventDefault();
-           var $a = $(this);
-           $.post($a.attr('href'), function() {
-	     // TODO: Errors
-             $a.closest('.deployment').remove();
-           });
-         })
-      })
+           e.preventDefault();
+                 var $a = $(this);
+                 $.post($a.attr('href'), function() {
+             // TODO: Errors
+                   $a.closest('.deployment').remove();
+                 });
+               })
+            })
     </script>
   </body>
 </html>
