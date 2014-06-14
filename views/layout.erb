@@ -37,19 +37,45 @@
     <script src="/js/zepto.min.js"></script>
     <script>
       $().ready(function() {
+
         $('select[name=env]').on('change', function() {
           $(this).closest('form').submit();
         });
 
         $('.deployment a.delete').on('click', function(e) {
-           e.preventDefault();
-                 var $a = $(this);
-                 $.post($a.attr('href'), function() {
-             // TODO: Errors
-                   $a.closest('.deployment').remove();
-                 });
-               })
-            })
+          e.preventDefault();
+          var $a = $(this);
+          $.post($a.attr('href'), function() {
+            // TODO: Errors
+            $a.closest('.deployment').remove();
+          });
+        });
+
+        var SORT = null;
+        $('a.col-head').on('click', function(e) {
+          e.preventDefault();
+          var cellIndex = $(this).closest('th')[0].cellIndex;
+          var wordFrom = function(el, i) { return el.children[i].innerHTML.toLowerCase(); };
+          var unsorted = $('tbody tr')
+          var sorted = unsorted.clone().sort(function(a, b) {
+            if(wordFrom(a, cellIndex) > wordFrom(b, cellIndex)) return 1;
+            if(wordFrom(a, cellIndex) < wordFrom(b, cellIndex)) return -1;
+            return 0;
+          });
+          if(SORT == 'ASC') {
+            sorted = sorted.get().reverse();
+            SORT = 'DESC'
+          }
+          if(SORT != 'ASC') SORT = 'ASC';
+          $.each(unsorted, function(index, row) {
+            $(row).replaceWith(sorted[index])
+          });
+          // var order = $.map(rows, function(row, _) {
+          //   return wordFrom(row, cellIndex)
+          // });
+          // console.log(order);
+        });
+      })
     </script>
   </body>
 </html>
