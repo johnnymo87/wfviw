@@ -91,7 +91,7 @@ end
 
 post "/deploy" do
   DeployManager.create(params)
-  201
+  redirect to('/'), 303
 end
 
 get "/" do
