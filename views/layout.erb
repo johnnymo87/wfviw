@@ -5,6 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>WFVIW!?</title>
+    <script src="/js/angular.min.js" type="text/javascript"></script>
+    <script src="/js/wfviw.js" type="text/javascript"></script>
     <link href="/css/bootstrap.min.css" rel="stylesheet"/>
     <style type="text/css">
       .page-header {
@@ -44,7 +46,7 @@
       }
     </style>
   </head>
-  <body>
+  <body ng-app="wfviw">
     <div class="container">
       <div class="page-header">
         <h1><abbr title="What Fucking Version is Where!?">WFVIW!?</abbr></h1>
@@ -53,48 +55,5 @@
         <%= yield %>
       </div>
     </div>
-    <script src="/js/zepto.min.js"></script>
-    <script>
-      $().ready(function() {
-
-        $('select[name=env]').on('change', function() {
-          $(this).closest('form').submit();
-        });
-
-        $('.deployment a.delete').on('click', function(e) {
-          e.preventDefault();
-          var $a = $(this);
-          $.post($a.attr('href'), function() {
-            // TODO: Errors
-            $a.closest('.deployment').remove();
-          });
-        });
-
-        var order = new (function() {
-          var __front = 1,
-              __back  = -1;
-          this.front = function() { return __front };
-          this.back  = function() { return __back };
-          this.switch = function() {
-            __front = -__front;
-            __back = -__back;
-          }
-        });
-
-        $('a.sortable').on('click', function(e) {
-          e.preventDefault();
-          var cellIndex = $(this).closest('th')[0].cellIndex;
-          var wordFrom = function(el, i) { return el.children[i].innerHTML.toLowerCase(); };
-          var sorted = $('tbody tr').sort(function(a, b) {
-            if(wordFrom(a, cellIndex) > wordFrom(b, cellIndex)) return order.front();
-            if(wordFrom(a, cellIndex) < wordFrom(b, cellIndex)) return order.back();
-            return 0;
-          });
-          order.switch();
-          $('tbody tr').remove();
-          $('tbody').append(sorted);
-        });
-      })
-    </script>
   </body>
 </html>
