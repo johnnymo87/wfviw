@@ -62,20 +62,18 @@
           }
         });
 
-        $('a.col-head').on('click', function(e) {
+        $('a.sortable').on('click', function(e) {
           e.preventDefault();
           var cellIndex = $(this).closest('th')[0].cellIndex;
           var wordFrom = function(el, i) { return el.children[i].innerHTML.toLowerCase(); };
-          var unsorted = $('tbody tr')
-          var sorted = unsorted.clone().sort(function(a, b) {
+          var sorted = $('tbody tr').sort(function(a, b) {
             if(wordFrom(a, cellIndex) > wordFrom(b, cellIndex)) return order.front();
             if(wordFrom(a, cellIndex) < wordFrom(b, cellIndex)) return order.back();
             return 0;
           });
           order.switch();
-          $.each(unsorted, function(index, row) {
-            $(row).replaceWith(sorted[index])
-          });
+          $('tbody tr').remove();
+          $('tbody').append(sorted);
         });
       })
     </script>
