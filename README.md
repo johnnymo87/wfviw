@@ -2,6 +2,10 @@
 
 _What Fucking Version is Where!?_ keeps track of what's deployed, and where.
 
+## Screenshot
+
+![screenshot](http://i.imgur.com/SyD8U4F.png)
+
 ## Running
 
     bundle install
