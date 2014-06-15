@@ -11,49 +11,60 @@
   </form>
 <% end %>
 
-<% if @deploys.none? %>
-  <p class="text-center">Nothing has been deployed &mdash;<strong>get to work</strong>!</p>
-<% else %>
-  <table class="table table-hover deployments">
-    <thead>
-      <tr>
-        <th><a href="/" class="sortable">Name</a></th>
-        <th><a href="/" class="sortable">Version</a></th>
-        <th><a href="/" class="sortable">Environment</a></th>
-        <th><a href="/" class="sortable">Deployed</a></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @deploys.each do |deploy| %>
-        <tr class="deployment">
-          <td><%= h deploy.name %></td>
-          <td><%= h deploy.version %></td>
-          <td><%= h deploy.environment.name %></td>
-          <td>
-            <%= h deploy.deployed_at.strftime("%F %R") %>
-            <a class="delete pull-right small" href="/deploy/<%= deploy.id %>/delete" class="small pull-right">Delete</a>
-          </td>
-        </tr>
-      <% end %>
-      <form class="form-inline" action="/deploy" method="post">
+<div id="deployment-table">
+  <% if @deploys.none? %>
+    <p class="text-center">Nothing has been deployed &mdash;<strong>get to work</strong>!</p>
+  <% else %>
+    <table class="table table-hover deployments">
+      <thead>
         <tr>
-          <td>
-            <label for="deployment_name" class="sr-only">Name</label>
-            <input id="deployment_name" class="form-control new-deployment" name="[name]" type="text" autofocus required>
-          </td>
-          <td>
-            <label for="deployment_version" class="sr-only">Version</label>
-            <input id="deployment_version" class="form-control new-deployment" name="[version]" type="text" required>
-          </td>
-          <td>
-            <label for="deployment_environment" class="sr-only">Environment</label>
-            <input id="deployment_environment" class="form-control new-deployment" name="[environment]" type="text" required>
-          </td>
-          <td>
-            <button type="submit" class="btn btn-primary">Add New Deployment</button>
-          </td>
+          <th><a href="/" class="sortable">Name</a></th>
+          <th><a href="/" class="sortable">Version</a></th>
+          <th><a href="/" class="sortable">Environment</a></th>
+          <th><a href="/" class="sortable">Deployed</a></th>
         </tr>
-      </form>
-    </tbody>
-  </table>
-<% end %>
+      </thead>
+      <tbody>
+        <% @deploys.each do |deploy| %>
+          <tr class="deployment">
+            <td><%= h deploy.name %></td>
+            <td><%= h deploy.version %></td>
+            <td><%= h deploy.environment.name %></td>
+            <td>
+              <%= h deploy.deployed_at.strftime("%F %R") %>
+              <a class="delete pull-right small" href="/deploy/<%= deploy.id %>/delete" class="small pull-right">Delete</a>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</div>
+
+<div id="deployment-form">
+  <form class="form-horizontal" role="form" action="/deploy" method="post">
+    <div class="form-group">
+      <label for="deployment_name" class="col-sm-2 control-label">Name</label>
+      <div class="col-sm-10">
+        <input id="deployment_name" class="col-sm-10 form-control" name="[name]" type="text" autofocus required>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="deployment_version" class="col-sm-2 control-label">Version</label>
+      <div class="col-sm-10">
+        <input id="deployment_version" class="form-control" name="[version]" type="text" required>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="deployment_environment" class="col-sm-2 control-label">Environment</label>
+      <div class="col-sm-10">
+        <input id="deployment_environment" class="form-control" name="[environment]" type="text" required>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="btn btn-primary">Add a new Deployment</button>
+      </div>
+    </div>
+  </form>
+</div>
