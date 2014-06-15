@@ -35,7 +35,25 @@
           </td>
         </tr>
       <% end %>
+      <form class="form-inline" action="/deploy" method="post">
+        <tr>
+          <td>
+            <label for="deployment_name" class="sr-only">Name</label>
+            <input id="deployment_name" class="form-control new-deployment" name="[name]" type="text" autofocus required>
+          </td>
+          <td>
+            <label for="deployment_version" class="sr-only">Version</label>
+            <input id="deployment_version" class="form-control new-deployment" name="[version]" type="text" required>
+          </td>
+          <td>
+            <label for="deployment_environment" class="sr-only">Environment</label>
+            <input id="deployment_environment" class="form-control new-deployment" name="[environment]" type="text" required>
+          </td>
+          <td>
+            <button type="submit" class="btn btn-primary">Add New Deployment</button>
+          </td>
+        </tr>
+      </form>
     </tbody>
   </table>
 <% end %>
-<a href='/deploy/new' class="btn btn-primary">Add a new Deployment</a>
