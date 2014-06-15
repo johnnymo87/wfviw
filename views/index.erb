@@ -18,22 +18,21 @@
     <table class="table table-hover deployments">
       <thead>
         <tr>
+          <th></th>
+          <th><a href="/" class="sortable">Deployed</a></th>
           <th><a href="/" class="sortable">Name</a></th>
           <th><a href="/" class="sortable">Version</a></th>
           <th><a href="/" class="sortable">Environment</a></th>
-          <th><a href="/" class="sortable">Deployed</a></th>
         </tr>
       </thead>
       <tbody>
         <% @deploys.each do |deploy| %>
           <tr class="deployment">
+            <td><a class="delete small" href="/deploy/<%= deploy.id %>/delete" class="small pull-right">Delete</a></td>
+            <td><%= h deploy.deployed_at.strftime("%F %R") %></td>
             <td><%= h deploy.name %></td>
             <td><%= h deploy.version %></td>
             <td><%= h deploy.environment.name %></td>
-            <td>
-              <%= h deploy.deployed_at.strftime("%F %R") %>
-              <a class="delete pull-right small" href="/deploy/<%= deploy.id %>/delete" class="small pull-right">Delete</a>
-            </td>
           </tr>
         <% end %>
       </tbody>
@@ -44,26 +43,26 @@
 <div id="deployment-form">
   <form class="form-horizontal" role="form" action="/deploy" method="post">
     <div class="form-group">
-      <label for="deployment_name" class="col-sm-2 control-label">Name</label>
-      <div class="col-sm-10">
-        <input id="deployment_name" class="col-sm-10 form-control" name="[name]" type="text" autofocus required>
+      <label for="deployment_name" class="sr-only">Name</label>
+      <div class="col-sm-offset-1 col-sm-10">
+        <input id="deployment_name" class="col-sm-10 form-control" placeholder="Name" name="[name]" type="text" autofocus required>
       </div>
     </div>
     <div class="form-group">
-      <label for="deployment_version" class="col-sm-2 control-label">Version</label>
-      <div class="col-sm-10">
-        <input id="deployment_version" class="form-control" name="[version]" type="text" required>
+      <label for="deployment_version" class="sr-only">Version</label>
+      <div class="col-sm-offset-1 col-sm-10">
+        <input id="deployment_version" class="form-control" placeholder="Version" name="[version]" type="text" required>
       </div>
     </div>
     <div class="form-group">
-      <label for="deployment_environment" class="col-sm-2 control-label">Environment</label>
-      <div class="col-sm-10">
-        <input id="deployment_environment" class="form-control" name="[environment]" type="text" required>
+      <label for="deployment_environment" class="sr-only">Environment</label>
+      <div class="col-sm-offset-1 col-sm-10">
+        <input id="deployment_environment" class="form-control" placeholder="Environment" name="[environment]" type="text" required>
       </div>
     </div>
     <div class="form-group">
-      <div class="col-sm-offset-2 col-sm-10">
-        <button type="submit" class="btn btn-primary">Add a new Deployment</button>
+      <div class="col-sm-offset-4 col-sm-4">
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Add a new Deployment</button>
       </div>
     </div>
   </form>
