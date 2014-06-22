@@ -1,0 +1,4 @@
+deployments.db
+bower_components/
+.vimrc
+public/js/vendor.min.js
