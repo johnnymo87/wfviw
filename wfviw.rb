@@ -94,6 +94,11 @@ post "/deploy" do
   redirect to('/'), 303
 end
 
+get "/deployments" do
+  content_type :json
+  DeployManager.latest(params).map(&:to_hash).to_json
+end
+
 get "/" do
   @deploys      = DeployManager.latest(params)
   @environments = DeployManager.environments

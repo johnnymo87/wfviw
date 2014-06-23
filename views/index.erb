@@ -25,17 +25,6 @@
           <th><a href="/" class="sortable">Environment</a></th>
         </tr>
       </thead>
-      <tbody>
-        <% @deploys.each do |deploy| %>
-          <tr class="deployment">
-            <td><a class="delete small" href="/deploy/<%= deploy.id %>/delete" class="small pull-right">Delete</a></td>
-            <td><%= h deploy.deployed_at.strftime("%F %R") %></td>
-            <td><%= h deploy.name %></td>
-            <td><%= h deploy.version %></td>
-            <td><%= h deploy.environment.name %></td>
-          </tr>
-        <% end %>
-      </tbody>
     </table>
   <% end %>
 </div>
