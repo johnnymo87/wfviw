@@ -8,6 +8,7 @@ module.exports = function(grunt) {
           'bower_components/jquery/jquery.min.js',
           'bower_components/underscore/underscore-min.js',
           'bower_components/backbone/backbone-min.js',
+          'bower_components/backbone-relational/backbone-relational.js',
         ],
         dest: 'public/js/vendor.min.js',
       },

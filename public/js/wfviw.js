@@ -1,6 +1,16 @@
 $().ready(function() {
 
   window.Deployment = Backbone.Model.extend({});
+  window.Deployments = Backbone.Collection.extend({
+    model: Deployment,
+    url: '/deployments'
+  });
+
+  window.Environment = Backbone.Model.extend({});
+  window.Environments = Backbone.Collection.extend({
+    model: Environment,
+    url: '/environments'
+  });
 
   window.DeploymentView = Backbone.View.extend({
     tagName: 'tr',
@@ -34,7 +44,7 @@ $().ready(function() {
     },
 
     render: function() {
-      this.addAll()
+      this.addAll();
       return this;
     },
 
@@ -49,15 +59,11 @@ $().ready(function() {
     }
   });
 
-  window.Deployments = Backbone.Collection.extend({
-    model: Deployment,
-    url: '/deployments'
-  });
-
   window.WFVIW = new (Backbone.Router.extend({
     routes: {"": "index"},
 
     initialize: function() {
+      this.environments = new Environments();
       this.deployments = new Deployments();
       this.deploymentsView = new DeploymentsView({collection: this.deployments});
       this.deploymentsView.render();

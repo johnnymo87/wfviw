@@ -99,6 +99,11 @@ get "/deployments" do
   DeployManager.latest(params).map(&:to_hash).to_json
 end
 
+get "/environments" do
+  content_type :json
+  DeployManager.environments.map(&:to_hash).to_json
+end
+
 get "/" do
   @deploys      = DeployManager.latest(params)
   @environments = DeployManager.environments
