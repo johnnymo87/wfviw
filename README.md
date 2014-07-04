@@ -8,6 +8,9 @@ _What Fucking Version is Where!?_ keeps track of what's deployed, and where.
 
 ## Running
 
+    bower install
+    npm install
+    grunt build
     bundle install
     bundle exec ruby wfviw.rb
 

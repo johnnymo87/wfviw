@@ -5,12 +5,13 @@ module.exports = function(grunt) {
       ng: {
         src: [
           'bower_components/moment/min/moment.min.js',
-          'bower_components/jquery/jquery.min.js',
-          'bower_components/underscore/underscore-min.js',
-          'bower_components/backbone/backbone-min.js',
+          'bower_components/jquery/jquery.js',
+          'bower_components/underscore/underscore.js',
+          'bower_components/backbone/backbone.js',
           'bower_components/backbone-relational/backbone-relational.js',
         ],
-        dest: 'public/js/vendor.min.js',
+        dest: 'public/js/vendor.js',
+        nonull: true
       },
     },
   });
