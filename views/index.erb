@@ -1,15 +1,8 @@
-<% if @environments.any? %>
-  <form action="/">
-    <div class="form-group">
-      <select name="env" class="form-control">
-        <option value="">All Environments</option>
-        <% @environments.each do |env| %>
-          <option value="<%= env.id %>" <%= "selected" if params["env"].to_i == env.id %>><%= env.name %></option>
-        <% end %>
-      </select>
-    </div>
-  </form>
-<% end %>
+<form action="/">
+  <div id="env-drop-select" class="form-group">
+    <!-- backbone drop select for environments -->
+  </div>
+</form>
 
 <div id="deployment-table">
   <% if @deploys.none? %>

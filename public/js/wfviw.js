@@ -1,14 +1,24 @@
 $().ready(function() {
 
-  window.Deployment = Backbone.Model.extend({});
+  window.Deployment = Backbone.RelationalModel.extend({});
   window.Deployments = Backbone.Collection.extend({
     model: Deployment,
     url: '/deployments'
   });
 
-  window.Environment = Backbone.Model.extend({});
+  window.Environment = Backbone.RelationalModel.extend({
+    relations: [{
+        type: Backbone.HasMany,
+        key: 'deployments',
+        relatedModel: 'window.Deployment',
+        reverseRelation: {
+            key: 'environment',
+            includeInJSON: 'id',
+        },
+    }]
+  });
   window.Environments = Backbone.Collection.extend({
-    model: Environment,
+    model: window.Environment,
     url: '/environments'
   });
 
@@ -59,17 +69,57 @@ $().ready(function() {
     }
   });
 
+  window.EnvironmentView = Backbone.View.extend({
+    template: _.template('<option value="<%= id %>"><%= name %></option>'),
+
+    render: function() {
+      this.el = $(this.template(this.model.toJSON()));
+      return this;
+    }
+  });
+
+  window.EnvironmentsView = Backbone.View.extend({
+    template: _.template(
+      '<select name="env" class="form-control">' +
+      '<option value>All Environments</option>' +
+      '</select>'
+    ),
+
+    initialize: function() {
+      this.collection.on('add', this.addOne, this);
+      this.collection.on('reset', this.addAll, this);
+    },
+
+    render: function() {
+      this.addAll();
+      return this;
+    },
+
+    addAll: function() {
+      $('#env-drop-select').html(this.template());
+      this.collection.forEach(this.addOne, this);
+    },
+
+    addOne: function(model) {
+      var view = new EnvironmentView({model: model});
+      $('#env-drop-select select').append(view.render().el);
+    }
+  });
+
   window.WFVIW = new (Backbone.Router.extend({
     routes: {"": "index"},
 
     initialize: function() {
       this.environments = new Environments();
       this.deployments = new Deployments();
+      this.environmentsView = new EnvironmentsView({collection: this.environments});
+      this.environmentsView.render();
       this.deploymentsView = new DeploymentsView({collection: this.deployments});
       this.deploymentsView.render();
     },
 
     index: function() {
+      this.environments.fetch({reset: true});
       $(this.deploymentsView.el).insertAfter('thead');
       this.deployments.fetch();
     },

@@ -1,6 +1,7 @@
 require "sinatra"
 require "sequel"
 require "sequel/extensions/core_extensions" # for lit()
+require 'sequel/plugins/json_serializer'
 require "json"
 
 DB = Sequel.connect(ARGV.shift || "sqlite://deployments.db")
@@ -19,6 +20,8 @@ DB.create_table? :deployments do
   primary_key :id
   foreign_key :environment_id, :environments, :null => false
 end
+
+Sequel::Model.plugin :json_serializer
 
 class Deployment < Sequel::Model
   many_to_one :environment
@@ -97,11 +100,12 @@ end
 get "/deployments" do
   content_type :json
   DeployManager.latest(params).map(&:to_hash).to_json
+  # DeployManager.environments.map{|env| env.deployments.map(&:to_hash)}.to_json
 end
 
 get "/environments" do
   content_type :json
-  DeployManager.environments.map(&:to_hash).to_json
+  Environment.to_json(include: :deployments)
 end
 
 get "/" do
