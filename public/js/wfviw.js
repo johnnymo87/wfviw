@@ -1,9 +1,24 @@
 $().ready(function() {
 
   window.Deployment = Backbone.RelationalModel.extend({});
+
   window.Deployments = Backbone.Collection.extend({
     model: Deployment,
-    url: '/deployments'
+
+    url: '/deployments',
+
+    listenToRelations: function(collection) {
+      this.environments = collection;
+      this.listenTo(collection, 'reset', this.parseRelations)
+    },
+
+    parseRelations: function() {
+      var deployments = this.environments.pluck('deployments');
+      _.each(deployments, function(deployment) {
+        this.add(deployment.models, {silent: true})
+      }, this);
+      this.trigger('reset')
+    }
   });
 
   window.Environment = Backbone.RelationalModel.extend({
@@ -17,14 +32,18 @@ $().ready(function() {
         },
     }]
   });
+
   window.Environments = Backbone.Collection.extend({
     model: window.Environment,
+
     url: '/environments'
   });
 
   window.DeploymentView = Backbone.View.extend({
     tagName: 'tr',
+
     className: 'deployment',
+
     template: _.template(
       '<td><a class="delete small" href="/deploy/<%= id %>/delete">Delete</a></td>' +
       '<td><%= deployed_at %></td>' +
@@ -79,6 +98,8 @@ $().ready(function() {
   });
 
   window.EnvironmentsView = Backbone.View.extend({
+    el: '#env-drop-select',
+
     template: _.template(
       '<select name="env" class="form-control">' +
       '<option value>All Environments</option>' +
@@ -96,13 +117,13 @@ $().ready(function() {
     },
 
     addAll: function() {
-      $('#env-drop-select').html(this.template());
+      this.$el.html(this.template());
       this.collection.forEach(this.addOne, this);
     },
 
     addOne: function(model) {
       var view = new EnvironmentView({model: model});
-      $('#env-drop-select select').append(view.render().el);
+      this.$('select:last').append(view.render().el);
     }
   });
 
@@ -112,6 +133,7 @@ $().ready(function() {
     initialize: function() {
       this.environments = new Environments();
       this.deployments = new Deployments();
+      this.deployments.listenToRelations(this.environments);
       this.environmentsView = new EnvironmentsView({collection: this.environments});
       this.environmentsView.render();
       this.deploymentsView = new DeploymentsView({collection: this.deployments});
@@ -121,7 +143,6 @@ $().ready(function() {
     index: function() {
       this.environments.fetch({reset: true});
       $(this.deploymentsView.el).insertAfter('thead');
-      this.deployments.fetch();
     },
 
     start: function() {
