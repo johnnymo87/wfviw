@@ -2,24 +2,7 @@ $().ready(function() {
 
   window.Deployment = Backbone.RelationalModel.extend({});
 
-  window.Deployments = Backbone.Collection.extend({
-    model: Deployment,
-
-    url: '/deployments',
-
-    listenToRelations: function(collection) {
-      this.environments = collection;
-      this.listenTo(collection, 'reset', this.parseRelations)
-    },
-
-    parseRelations: function() {
-      var deployments = this.environments.pluck('deployments');
-      _.each(deployments, function(deployment) {
-        this.add(deployment.models, {silent: true})
-      }, this);
-      this.trigger('reset')
-    }
-  });
+  window.Deployments = Backbone.Collection.extend({model: Deployment});
 
   window.Environment = Backbone.RelationalModel.extend({
     relations: [{
@@ -36,7 +19,16 @@ $().ready(function() {
   window.Environments = Backbone.Collection.extend({
     model: window.Environment,
 
-    url: '/environments'
+    url: '/environments',
+
+    flatMapSubmodels: function() {
+      return _.flatten(
+        _.map(
+            this.pluck('deployments'),
+            function(d) { return d.models }
+        )
+      )
+    }
   });
 
   window.DeploymentView = Backbone.View.extend({
@@ -53,7 +45,7 @@ $().ready(function() {
     ),
 
     formatTime: function(timeStr) {
-      return moment(new Date(timeStr)).format('MM-DD-YYYY, HH:mm');
+      return moment(new Date(timeStr)).format('MM-DD-YYYY -- HH:mm');
     },
 
     render: function() {
@@ -130,19 +122,19 @@ $().ready(function() {
   window.WFVIW = new (Backbone.Router.extend({
     routes: {"": "index"},
 
-    initialize: function() {
+    index: function() {
       this.environments = new Environments();
-      this.deployments = new Deployments();
-      this.deployments.listenToRelations(this.environments);
       this.environmentsView = new EnvironmentsView({collection: this.environments});
       this.environmentsView.render();
-      this.deploymentsView = new DeploymentsView({collection: this.deployments});
-      this.deploymentsView.render();
-    },
 
-    index: function() {
-      this.environments.fetch({reset: true});
-      $(this.deploymentsView.el).insertAfter('thead');
+      // must fetch to get submodels
+      var that = this;
+      this.environments.fetch({reset: true}).done(function() {
+        that.deployments = new Deployments(that.environments.flatMapSubmodels());
+        this.deploymentsView = new DeploymentsView({collection: that.deployments});
+        this.deploymentsView.render();
+        $(this.deploymentsView.el).insertAfter('thead');
+      });
     },
 
     start: function() {
