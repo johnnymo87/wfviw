@@ -9,6 +9,7 @@ module.exports = function(grunt) {
           'bower_components/underscore/underscore.js',
           'bower_components/backbone/backbone.js',
           'bower_components/backbone-relational/backbone-relational.js',
+          'bower_components/react/react.js',
         ],
         dest: 'public/js/vendor.js',
         nonull: true
