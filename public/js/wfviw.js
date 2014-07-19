@@ -31,6 +31,155 @@ $().ready(function() {
     }
   });
 
+  // var Table = React.createClass({
+  //   getInitialState: function() {
+  //     return {data: this.props.data};
+  //   },
+  //   render: function () {
+  //     return (
+  //       React.DOM.table(null, React.DOM.tbody(null,
+  //         this.state.data.map(function (row) {
+  //           return (
+  //             React.DOM.tr(null,
+  //               row.map(function (cell) {
+  //                 return React.DOM.td(null, cell);
+  //               })
+  //             )
+  //           );
+  //         })
+  //       ))
+  //     );
+  //   }
+  // });
+  //
+  // var data = [[1,2,3],[4,5,6],[7,8,9]];
+  //
+  // var table = React.renderComponent(
+  //   Table({data: data}),
+  //   $('table')[0]);
+  //
+
+  // deployed_at: "2014-07-04 23:48:28 +0100"
+  // deployed_by: null
+  // environment: 1
+  // environment_id: 1
+  // hostname: null
+  // id: 1
+  // name: "goals"
+  // version: "2.0"
+
+// var ProductCategoryRow = React.createClass({
+//     render: function() {
+//         return (<tr><th colSpan="2">{this.props.category}</th></tr>);
+//     }
+// });
+//
+// var ProductRow = React.createClass({
+//     render: function() {
+//         var name = this.props.product.stocked ?
+//             this.props.product.name :
+//             <span style={{color: 'red'}}>
+//                 {this.props.product.name}
+//             </span>;
+//         return (
+//             <tr>
+//                 <td>{name}</td>
+//                 <td>{this.props.product.price}</td>
+//             </tr>
+//         );
+//     }
+// });
+//
+// var ProductTable = React.createClass({
+//     render: function() {
+//         var rows = [];
+//         var lastCategory = null;
+//         this.props.products.forEach(function(product) {
+//             if (product.category !== lastCategory) {
+//                 rows.push(<ProductCategoryRow category={product.category} key={product.category} />);
+//             }
+//             rows.push(<ProductRow product={product} key={product.name} />);
+//             lastCategory = product.category;
+//         });
+//         return (
+//             <table>
+//                 <thead>
+//                     <tr>
+//                         <th>Name</th>
+//                         <th>Price</th>
+//                     </tr>
+//                 </thead>
+//                 <tbody>{rows}</tbody>
+//             </table>
+//         );
+//     }
+// });
+//
+// var SearchBar = React.createClass({
+//     render: function() {
+//         return (
+//             <form onSubmit={this.handleSubmit}>
+//                 <input type="text" placeholder="Search..." />
+//                 <p>
+//                     <input type="checkbox" />
+//                     Only show products in stock
+//                 </p>
+//             </form>
+//         );
+//     }
+// });
+//
+// var FilterableProductTable = React.createClass({
+//     render: function() {
+//         return (
+//             <div>
+//                 <SearchBar />
+//                 <ProductTable products={this.props.products} />
+//             </div>
+//         );
+//     }
+// });
+//
+//
+// var PRODUCTS = [
+//   {category: 'Sporting Goods', price: '$49.99', stocked: true, name: 'Football'},
+//   {category: 'Sporting Goods', price: '$9.99', stocked: true, name: 'Baseball'},
+//   {category: 'Sporting Goods', price: '$29.99', stocked: false, name: 'Basketball'},
+//   {category: 'Electronics', price: '$99.99', stocked: true, name: 'iPod Touch'},
+//   {category: 'Electronics', price: '$399.99', stocked: false, name: 'iPhone 5'},
+//   {category: 'Electronics', price: '$199.99', stocked: true, name: 'Nexus 7'}
+// ];
+//  
+// React.renderComponent(<FilterableProductTable products={PRODUCTS} />, document.body); 
+//   var DeploymentRow = React.createClass({
+//     render: function() {
+//
+//     }
+//   });
+//
+  var DeploymentRow = React.CreateClass({
+    render: function() {
+      var href = '/deploy/' + this.props.id + '/delete'
+      var deleteButton = React.Dom.a({class: 'delete small', href: href}, 'Delete')
+      return (React.Dom.tr({}, [
+        React.Dom.td({}, deleteButton),
+        React.Dom.td({}, this.props.deployed_at),
+        React.Dom.td({}, this.props.name),
+        React.Dom.td({}, this.props.version),
+        React.Dom.td({}, this.props.environment_id),
+      ]))
+    }
+  });
+
+  var DeploymentTable = React.createClass({
+    render: function() {
+      var rows = [];
+      this.props.deployments.forEach(function(deployment) {
+        rows.push();
+      });
+    }
+  });
+
   window.DeploymentView = Backbone.View.extend({
     tagName: 'tr',
 
