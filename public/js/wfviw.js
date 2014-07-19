@@ -156,27 +156,74 @@ $().ready(function() {
 //
 //     }
 //   });
-//
+
+  var D = React.Dom;
+
   var DeploymentRow = React.CreateClass({
     render: function() {
       var href = '/deploy/' + this.props.id + '/delete'
-      var deleteButton = React.Dom.a({class: 'delete small', href: href}, 'Delete')
-      return (React.Dom.tr({}, [
-        React.Dom.td({}, deleteButton),
-        React.Dom.td({}, this.props.deployed_at),
-        React.Dom.td({}, this.props.name),
-        React.Dom.td({}, this.props.version),
-        React.Dom.td({}, this.props.environment_id),
+      var deleteButton = D.a({class: 'delete small', href: href}, 'Delete')
+      return (D.tr({}, [
+        D.td({}, deleteButton),
+        D.td({}, this.props.deployed_at),
+        D.td({}, this.props.name),
+        D.td({}, this.props.version),
+        D.td({}, this.props.environment_id),
       ]))
     }
   });
 
+// var ProductTable = React.createClass({
+//     render: function() {
+//         var rows = [];
+//         var lastCategory = null;
+//         this.props.products.forEach(function(product) {
+//             if (product.category !== lastCategory) {
+//                 rows.push(<ProductCategoryRow category={product.category} key={product.category} />);
+//             }
+//             rows.push(<ProductRow product={product} key={product.name} />);
+//             lastCategory = product.category;
+//         });
+//         return (
+//             <table>
+//                 <thead>
+//                     <tr>
+//                         <th>Name</th>
+//                         <th>Price</th>
+//                     </tr>
+//                 </thead>
+//                 <tbody>{rows}</tbody>
+//             </table>
+//         );
+//     }
+// });
   var DeploymentTable = React.createClass({
     render: function() {
       var rows = [];
       this.props.deployments.forEach(function(deployment) {
-        rows.push();
+        rows.push(DeploymentRow(deployment));
       });
+      return (
+        D.table(
+          {},
+          [
+            D.thead(
+              {},
+              D.tr(
+                {},
+                [
+                  D.th({}, ''),
+                  D.th({}, D.a({href: '/', class: 'sortable'}, 'Deployed')),
+                  D.th({}, D.a({href: '/', class: 'sortable'}, 'Name')),
+                  D.th({}, D.a({href: '/', class: 'sortable'}, 'Version')),
+                  D.th({}, D.a({href: '/', class: 'sortable'}, 'Environment'))
+                ]
+              )
+            ),
+            D.tbody({}, rows)
+          ]
+        )
+      )
     }
   });
 
