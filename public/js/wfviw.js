@@ -31,43 +31,6 @@ $().ready(function() {
     }
   });
 
-  // var Table = React.createClass({
-  //   getInitialState: function() {
-  //     return {data: this.props.data};
-  //   },
-  //   render: function () {
-  //     return (
-  //       React.DOM.table(null, React.DOM.tbody(null,
-  //         this.state.data.map(function (row) {
-  //           return (
-  //             React.DOM.tr(null,
-  //               row.map(function (cell) {
-  //                 return React.DOM.td(null, cell);
-  //               })
-  //             )
-  //           );
-  //         })
-  //       ))
-  //     );
-  //   }
-  // });
-  //
-  // var data = [[1,2,3],[4,5,6],[7,8,9]];
-  //
-  // var table = React.renderComponent(
-  //   Table({data: data}),
-  //   $('table')[0]);
-  //
-
-  // deployed_at: "2014-07-04 23:48:28 +0100"
-  // deployed_by: null
-  // environment: 1
-  // environment_id: 1
-  // hostname: null
-  // id: 1
-  // name: "goals"
-  // version: "2.0"
-
   window.DeploymentView = Backbone.View.extend({
     tagName: 'tr',
 
@@ -157,6 +120,22 @@ $().ready(function() {
   });
 
   var D = React.DOM;
+
+  var EnvironmentOption = React.createClass({
+    render: function() {
+      return D.option({}, this.props.environment)
+    }
+  });
+
+  var EnvironmentSelect = React.createClass({
+    render: function() {
+      var options = [D.input({value: 'All'})];
+      this.props.environments.forEach(function(environment) {
+        options.push(EnvironmentOption({environment: environment}))
+      });
+      return D.select({className: 'form-control', name: 'env'}, options)
+    }
+  });
 
   var DeploymentRow = React.createClass({
 
