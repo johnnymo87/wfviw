@@ -68,165 +68,6 @@ $().ready(function() {
   // name: "goals"
   // version: "2.0"
 
-// var ProductCategoryRow = React.createClass({
-//     render: function() {
-//         return (<tr><th colSpan="2">{this.props.category}</th></tr>);
-//     }
-// });
-//
-// var ProductRow = React.createClass({
-//     render: function() {
-//         var name = this.props.product.stocked ?
-//             this.props.product.name :
-//             <span style={{color: 'red'}}>
-//                 {this.props.product.name}
-//             </span>;
-//         return (
-//             <tr>
-//                 <td>{name}</td>
-//                 <td>{this.props.product.price}</td>
-//             </tr>
-//         );
-//     }
-// });
-//
-// var ProductTable = React.createClass({
-//     render: function() {
-//         var rows = [];
-//         var lastCategory = null;
-//         this.props.products.forEach(function(product) {
-//             if (product.category !== lastCategory) {
-//                 rows.push(<ProductCategoryRow category={product.category} key={product.category} />);
-//             }
-//             rows.push(<ProductRow product={product} key={product.name} />);
-//             lastCategory = product.category;
-//         });
-//         return (
-//             <table>
-//                 <thead>
-//                     <tr>
-//                         <th>Name</th>
-//                         <th>Price</th>
-//                     </tr>
-//                 </thead>
-//                 <tbody>{rows}</tbody>
-//             </table>
-//         );
-//     }
-// });
-//
-// var SearchBar = React.createClass({
-//     render: function() {
-//         return (
-//             <form onSubmit={this.handleSubmit}>
-//                 <input type="text" placeholder="Search..." />
-//                 <p>
-//                     <input type="checkbox" />
-//                     Only show products in stock
-//                 </p>
-//             </form>
-//         );
-//     }
-// });
-//
-// var FilterableProductTable = React.createClass({
-//     render: function() {
-//         return (
-//             <div>
-//                 <SearchBar />
-//                 <ProductTable products={this.props.products} />
-//             </div>
-//         );
-//     }
-// });
-//
-//
-// var PRODUCTS = [
-//   {category: 'Sporting Goods', price: '$49.99', stocked: true, name: 'Football'},
-//   {category: 'Sporting Goods', price: '$9.99', stocked: true, name: 'Baseball'},
-//   {category: 'Sporting Goods', price: '$29.99', stocked: false, name: 'Basketball'},
-//   {category: 'Electronics', price: '$99.99', stocked: true, name: 'iPod Touch'},
-//   {category: 'Electronics', price: '$399.99', stocked: false, name: 'iPhone 5'},
-//   {category: 'Electronics', price: '$199.99', stocked: true, name: 'Nexus 7'}
-// ];
-//  
-// React.renderComponent(<FilterableProductTable products={PRODUCTS} />, document.body); 
-//   var DeploymentRow = React.createClass({
-//     render: function() {
-//
-//     }
-//   });
-
-  var D = React.Dom;
-
-  var DeploymentRow = React.CreateClass({
-    render: function() {
-      var href = '/deploy/' + this.props.id + '/delete'
-      var deleteButton = D.a({class: 'delete small', href: href}, 'Delete')
-      return (D.tr({}, [
-        D.td({}, deleteButton),
-        D.td({}, this.props.deployed_at),
-        D.td({}, this.props.name),
-        D.td({}, this.props.version),
-        D.td({}, this.props.environment_id),
-      ]))
-    }
-  });
-
-// var ProductTable = React.createClass({
-//     render: function() {
-//         var rows = [];
-//         var lastCategory = null;
-//         this.props.products.forEach(function(product) {
-//             if (product.category !== lastCategory) {
-//                 rows.push(<ProductCategoryRow category={product.category} key={product.category} />);
-//             }
-//             rows.push(<ProductRow product={product} key={product.name} />);
-//             lastCategory = product.category;
-//         });
-//         return (
-//             <table>
-//                 <thead>
-//                     <tr>
-//                         <th>Name</th>
-//                         <th>Price</th>
-//                     </tr>
-//                 </thead>
-//                 <tbody>{rows}</tbody>
-//             </table>
-//         );
-//     }
-// });
-  var DeploymentTable = React.createClass({
-    render: function() {
-      var rows = [];
-      this.props.deployments.forEach(function(deployment) {
-        rows.push(DeploymentRow(deployment));
-      });
-      return (
-        D.table(
-          {},
-          [
-            D.thead(
-              {},
-              D.tr(
-                {},
-                [
-                  D.th({}, ''),
-                  D.th({}, D.a({href: '/', class: 'sortable'}, 'Deployed')),
-                  D.th({}, D.a({href: '/', class: 'sortable'}, 'Name')),
-                  D.th({}, D.a({href: '/', class: 'sortable'}, 'Version')),
-                  D.th({}, D.a({href: '/', class: 'sortable'}, 'Environment'))
-                ]
-              )
-            ),
-            D.tbody({}, rows)
-          ]
-        )
-      )
-    }
-  });
-
   window.DeploymentView = Backbone.View.extend({
     tagName: 'tr',
 
@@ -315,6 +156,57 @@ $().ready(function() {
     }
   });
 
+  var D = React.DOM;
+
+  var DeploymentRow = React.createClass({
+
+    formatTime: function(timeStr) {
+      return moment(new Date(timeStr)).format('MM-DD-YYYY -- HH:mm');
+    },
+
+    render: function() {
+      var href = '/deploy/' + this.props.id + '/delete'
+      var deleteButton = D.a({className: 'delete small', href: href}, 'Delete')
+      return (D.tr({}, [
+        D.td({}, deleteButton),
+        D.td({}, this.formatTime(this.props.deployed_at)),
+        D.td({}, this.props.name),
+        D.td({}, this.props.version),
+        D.td({}, this.props.environment_id),
+      ]))
+    }
+  });
+
+  var DeploymentTable = React.createClass({
+    render: function() {
+      var rows = [];
+      this.props.deployments.forEach(function(deployment) {
+        rows.push(DeploymentRow(deployment));
+      });
+      return (
+        D.table(
+          {className: 'table table-hover deployments'},
+          [
+            D.thead(
+              {},
+              D.tr(
+                {className: 'deployment'},
+                [
+                  D.th({}, ''),
+                  D.th({}, D.a({href: '/', class: 'sortable'}, 'Deployed')),
+                  D.th({}, D.a({href: '/', class: 'sortable'}, 'Name')),
+                  D.th({}, D.a({href: '/', class: 'sortable'}, 'Version')),
+                  D.th({}, D.a({href: '/', class: 'sortable'}, 'Environment'))
+                ]
+              )
+            ),
+            D.tbody({}, rows)
+          ]
+        )
+      )
+    }
+  });
+
   window.WFVIW = new (Backbone.Router.extend({
     routes: {"": "index"},
 
@@ -327,9 +219,12 @@ $().ready(function() {
       var that = this;
       this.environments.fetch({reset: true}).done(function() {
         that.deployments = new Deployments(that.environments.flatMapSubmodels());
-        this.deploymentsView = new DeploymentsView({collection: that.deployments});
-        this.deploymentsView.render();
-        $(this.deploymentsView.el).insertAfter('thead');
+        React.renderComponent(
+          DeploymentTable({deployments: that.deployments.toJSON()}),
+          $('#deployment-table')[0]);
+        // this.deploymentsView = new DeploymentsView({collection: that.deployments});
+        // this.deploymentsView.render();
+        // $(this.deploymentsView.el).insertAfter('thead');
       });
     },
 
