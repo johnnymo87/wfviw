@@ -157,6 +157,9 @@ $().ready(function() {
   });
 
   var DeploymentTable = React.createClass({
+    propTypes: {
+      deployments: React.PropTypes.array
+    },
     render: function() {
       var rows = [];
       this.props.deployments.forEach(function(deployment) {
@@ -186,25 +189,68 @@ $().ready(function() {
     }
   });
 
+  var EnvironmentSelect = React.createClass({
+    handleChange: function(e) {
+      this.props.onChange(parseInt(this.getDOMNode().value))
+    },
+    render: function() {
+      return D.select({onChange: this.handleChange},[
+        D.option({value: 1}, "Test"),
+        D.option({value: 2}, "Test 2"),
+        D.option({value: 3}, "Test 3")
+      ])
+    }
+  })
+
+  var App = React.createClass({
+    getInitialState: function() {
+      return {environmentId: null};
+    },
+    propTypes: {
+      deployments: React.PropTypes.object
+    },
+    handleEnvironmentChange: function(environmentId) {
+      this.setState({environmentId: environmentId})
+    },
+    filteredEnvironments: function() {
+      var filteredEnvironments;
+      if (this.state.environmentId != null) {
+        var that = this;
+        filteredEnvironments = _.map(that.props.deployments.where(
+          {environment_id: that.state.environmentId}
+        ), function(item) { return item.toJSON(); } );
+      } else {
+        filteredEnvironments = this.props.deployments.toJSON();
+      }
+      return filteredEnvironments;
+    },
+    render: function() {
+      return (D.div({}, [
+        EnvironmentSelect({onChange: this.handleEnvironmentChange}),
+        DeploymentTable({deployments: this.filteredEnvironments()})
+      ]));
+    }
+  });
+
   window.WFVIW = new (Backbone.Router.extend({
     routes: {"": "index"},
 
     index: function() {
       this.environments = new Environments();
-      this.environmentsView = new EnvironmentsView({collection: this.environments});
-      this.environmentsView.render();
 
       // must fetch to get submodels
       var that = this;
       this.environments.fetch({reset: true}).done(function() {
         that.deployments = new Deployments(that.environments.flatMapSubmodels());
         React.renderComponent(
-          DeploymentTable({deployments: that.deployments.toJSON()}),
-          $('#deployment-table')[0]);
+          App({deployments: that.deployments}),
+          document.getElementById("deployment-table")
+        );
+      });
         // this.deploymentsView = new DeploymentsView({collection: that.deployments});
         // this.deploymentsView.render();
         // $(this.deploymentsView.el).insertAfter('thead');
-      });
+
     },
 
     start: function() {
