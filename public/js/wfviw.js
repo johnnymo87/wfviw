@@ -1,5 +1,18 @@
 $().ready(function() {
 
+  window.user = {
+    data: [
+      {name:"T. Woods", age:37},
+      {name:"P. Mickelson", age:43}
+    ],
+    clickHandler: function(e) {
+      e.preventDefault();
+      var randomNum = ((Math.random() * 2 | 0) + 1) - 1;
+      $("input").val(this.data[randomNum].name + " " + this.data[randomNum].age);
+    }
+  }
+  $("button").click(user.clickHandler.bind(user));
+
   window.Deployment = Backbone.RelationalModel.extend({});
 
   window.Deployments = Backbone.Collection.extend({model: Deployment});
